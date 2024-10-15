@@ -1,19 +1,12 @@
-import { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import { MantineProvider } from '@mantine/core';
-import { theme } from './theme';
-import './App.scss';
+import { Outlet } from 'react-router-dom';
 
-export default function App() {
-	const { pathname } = useLocation();
-
-	useEffect(() => {
-		window.scrollTo(0, 0);
-	}, [pathname]);
-
-	return (
-		<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-			<Outlet />
-		</MantineProvider>
-	);
+function App() {
+  return (
+    <div>
+      <h1>Welcome to the Application</h1>
+      <Outlet />
+    </div>
+  );
 }
+
+export default App;
