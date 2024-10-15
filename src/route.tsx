@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App'; 
-import Landing from './pages/landing/Landing'; 
-import { LoginPage } from './pages/LoginPage'; 
-import ResourceListPage from './pages/ResourceListPage'; 
-import ResourceDetailPage from './pages/ResourceDetailPage'; 
-import ProtectedRoute from './ProtectedRoute'; 
+import App from './App';
+import Landing from './pages/landing/Landing';
+import { LoginPage } from './pages/LoginPage';
+import Dashboard from './pages/Dashboard'; 
+import About from './pages/About';
+import Contact from './pages/Contact';
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
 export const routes = createBrowserRouter([
   {
@@ -20,19 +21,27 @@ export const routes = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: '/resources',
+        path: '/about',
+        element: <About />,
+      },
+      {
+        path: '/contact',
+        element: <Contact />,
+      },
+      {
+        path: '/dashboard',
         element: (
-          <ProtectedRoute>
-            <ResourceListPage /> 
-          </ProtectedRoute>
+          <SignedIn> 
+            <Dashboard />
+          </SignedIn>
         ),
       },
       {
-        path: '/resources/:id',
+        path: '*',
         element: (
-          <ProtectedRoute>
-            <ResourceDetailPage /> 
-          </ProtectedRoute>
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
         ),
       },
     ],

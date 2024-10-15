@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import { routes } from './route'; 
-
+import { ClerkProvider } from '@clerk/clerk-react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,10 +16,18 @@ const queryClient = new QueryClient({
   },
 });
 
+const clerkFrontendApi = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!clerkFrontendApi) {
+  throw new Error('Clerk Frontend API key is not defined in environment variables');
+}
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={routes} /> 
-    </QueryClientProvider>
-  </StrictMode>
-);
+	<StrictMode>
+	  <ClerkProvider publishableKey={clerkFrontendApi}>
+		<QueryClientProvider client={queryClient}>
+		  <RouterProvider router={routes} /> 
+		</QueryClientProvider>
+	  </ClerkProvider>
+	</StrictMode>
+  );

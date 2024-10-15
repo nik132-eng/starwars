@@ -1,12 +1,15 @@
-import { Outlet } from 'react-router-dom';
+// App.tsx
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import Navbar from '../src/components/Navbar';  
+import { Outlet } from 'react-router-dom';  
 
-function App() {
+const App = () => {
   return (
     <div>
-      <h1>Welcome to the Application</h1>
-      <Outlet />
+      <Navbar /> 
+      <Outlet />  
     </div>
   );
-}
+};
 
 export default App;

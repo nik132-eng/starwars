@@ -1,0 +1,55 @@
+$navbar-bg-color: #1a1a1a; 
+$navbar-text-color: #FFD700; 
+$link-color: #ffffff; 
+$link-hover-color: #FFA500; 
+.navbar {
+  background-color: $navbar-bg-color;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Star Jedi', sans-serif;
+
+    .navbar-logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $navbar-text-color;
+      text-decoration: none;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .navbar-links {
+      a {
+        margin-right: 1.5rem;
+        color: $link-color;
+        text-decoration: none;
+        font-size: 1.2rem;
+
+        &:hover {
+          color: $link-hover-color;
+          text-decoration: underline; 
+        }
+      }
+    }
+
+    .navbar-auth {
+        display: flex; 
+        align-items: center; 
+    
+        .auth-link {
+          color: #ffffff; 
+          text-decoration: none;
+          margin-right: 1rem; 
+          font-size: 1rem; 
+          transition: color 0.3s; 
+    
+          &:hover {
+            color: #FFD700; 
+          }
+        }
+      }
+  }
+}
