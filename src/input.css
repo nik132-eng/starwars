@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cl-socialButtonsProviderIcon{
+    margin: 0 !important;
+}
+
+@layer base {
+    html, body {
+      cursor: url('../assets/cursorlight.png'), auto;
+    }
+  }
+
+.clerk-powered {
+    display: none !important;
+}
+  

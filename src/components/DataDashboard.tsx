@@ -1,104 +1,159 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardSection, Title, Text, Select, Input } from '@mantine/core';
-import './DataDashboard.scss'
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Loader2 } from "lucide-react"
 
 interface Item {
-  name: string;
-  model?: string; // Optional, for starships
-  vehicle_class?: string; // Optional, for vehicles
-  // Add other properties as needed for different categories
+  [key: string]: any
 }
 
 interface DataDashboardProps {
-  category: string;
+  category: string
 }
 
-const DataDashboard: React.FC<DataDashboardProps> = ({ category }) => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<string>('name');
+export default function DataDashboard({ category }: DataDashboardProps) {
+  const [items, setItems] = useState<Item[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [sortBy, setSortBy] = useState<string>('name')
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`https://swapi.dev/api/${category}/`);
+        const response = await fetch(`https://swapi.dev/api/${category}/`)
         if (!response.ok) {
-          throw new Error('Failed to fetch items');
+          throw new Error('Failed to fetch items')
         }
-        const data = await response.json();
-        setItems(data.results);
-        setLoading(false);
+        const data = await response.json()
+        setItems(data.results)
+        setLoading(false)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-        setLoading(false);
+        setError(err instanceof Error ? err.message : 'Unknown error')
+        setLoading(false)
       }
-    };
+    }
 
-    fetchItems();
-  }, [category]);
+    fetchItems()
+    setSortBy('name')
+  }, [category])
+
+  const getDisplayFields = (item: Item) => {
+    switch (category) {
+      case 'people':
+        return [
+          { label: 'Height', value: item.height },
+          { label: 'Mass', value: item.mass },
+          { label: 'Birth Year', value: item.birth_year },
+        ]
+      case 'films':
+        return [
+          { label: 'Director', value: item.director },
+          { label: 'Producer', value: item.producer },
+          { label: 'Release Date', value: item.release_date },
+        ]
+      case 'starships':
+      case 'vehicles':
+        return [
+          { label: 'Model', value: item.model },
+          { label: 'Manufacturer', value: item.manufacturer },
+          { label: 'Class', value: item.starship_class || item.vehicle_class },
+        ]
+      case 'species':
+        return [
+          { label: 'Classification', value: item.classification },
+          { label: 'Designation', value: item.designation },
+          { label: 'Language', value: item.language },
+        ]
+      case 'planets':
+        return [
+          { label: 'Climate', value: item.climate },
+          { label: 'Terrain', value: item.terrain },
+          { label: 'Population', value: item.population },
+        ]
+      default:
+        return []
+    }
+  }
+
+  const getSortOptions = () => {
+    const options = [{ value: 'name', label: 'Name' }]
+    if (items.length > 0) {
+      const fields = getDisplayFields(items[0])
+      fields.forEach(field => {
+        options.push({ value: field.label.toLowerCase(), label: field.label })
+      })
+    }
+    return options
+  }
 
   const sortedItems = items
-  .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  .sort((a, b) => {
-    const aValue = a[sortBy as keyof Item];
-    const bValue = b[sortBy as keyof Item];
+    .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      const aValue = a[sortBy] || ''
+      const bValue = b[sortBy] || ''
+      return aValue.localeCompare(bValue)
+    })
 
-    // Handle undefined cases by comparing defined values or fallback to empty string
-    if (aValue === undefined && bValue === undefined) return 0;
-    if (aValue === undefined) return 1; // Move undefined items to the end
-    if (bValue === undefined) return -1; // Move undefined items to the end
-
-    if (aValue < bValue) return -1;
-    if (aValue > bValue) return 1;
-    return 0;
-  });
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <Loader2 className="h-8 w-8 animate-spin text-yellow-400" />
+    </div>
+  )
+  if (error) return <div className="text-red-500 text-center">Error: {error}</div>
 
   return (
-    <div className="p-4">
-      <Title order={1} className="text-2xl font-bold mb-4">{`${category.charAt(0).toUpperCase() + category.slice(1)} Dashboard`}</Title>
+    <div className="p-4 bg-gray-900 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-yellow-400">
+        {`${category.charAt(0).toUpperCase() + category.slice(1)} Dashboard`}
+      </h1>
 
-      <div className="mb-4 flex space-x-4">
+      <div className="mb-6 flex space-x-4">
         <Input
-          type="text"
           placeholder={`Search by name`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ width: '33%' }}
+          className="w-1/3 bg-gray-800 text-white border-gray-700"
         />
 
-        <Select
-          value={sortBy}
-          onChange={(value) => setSortBy(value as string)}
-          placeholder="Sort by"
-          style={{ width: '24%' }}
-          data={[
-            { value: 'name', label: 'Name' },
-            { value: 'model', label: 'Model' },
-            { value: 'vehicle_class', label: 'Class' },
-          ]}
-        />
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-1/4 bg-gray-800 text-white border-gray-700">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 text-white border-gray-700">
+            {getSortOptions().map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedItems.map((item) => (
-          <Card key={item.name} shadow="sm" padding="lg">
-            <CardSection>
-              <Title order={3}>{item.name}</Title>
-            </CardSection>
-            <CardSection>
-              <Text><strong>Model:</strong> {item.model || 'N/A'}</Text>
-              <Text><strong>Class:</strong> {item.vehicle_class || 'N/A'}</Text>
-            </CardSection>
+          <Card key={item.name} className="bg-gray-800 text-white border-gray-700 hover:border-yellow-400 transition-colors">
+            <CardHeader className="bg-gray-700 rounded-t-lg">
+              <CardTitle className="text-yellow-400">{item.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              {getDisplayFields(item).map((field, index) => (
+                <p key={index} className="mb-2 flex justify-between">
+                  <span className="font-semibold text-gray-400">{field.label}:</span>
+                  <span>{field.value || 'N/A'}</span>
+                </p>
+              ))}
+              {category === 'films' && (
+                <Badge variant="secondary" className="mt-2 bg-yellow-400 text-gray-900">
+                  {`Episode ${item.episode_id}`}
+                </Badge>
+              )}
+            </CardContent>
           </Card>
         ))}
       </div>
     </div>
-  );
-};
-
-export default DataDashboard;
+  )
+}

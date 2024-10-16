@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import { routes } from './route'; 
 import { ClerkProvider } from '@clerk/clerk-react';
+import './input.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,12 @@ if (!clerkFrontendApi) {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<StrictMode>
-	  <ClerkProvider publishableKey={clerkFrontendApi}>
+	  <ClerkProvider publishableKey={clerkFrontendApi} appearance={{
+        elements: {
+          footer: "hidden",
+          header: "hidden"
+        },
+      }}>
 		<QueryClientProvider client={queryClient}>
 		  <RouterProvider router={routes} /> 
 		</QueryClientProvider>

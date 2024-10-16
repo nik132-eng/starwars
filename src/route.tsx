@@ -1,11 +1,12 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import App from './App';
 import Landing from './pages/landing/Landing';
-import { LoginPage } from './pages/LoginPage';
+import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard'; 
 import About from './pages/About';
 import Contact from './pages/Contact';
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import NotFound from './pages/Notfound';
 
 export const routes = createBrowserRouter([
   {
@@ -13,36 +14,44 @@ export const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/',
+        index: true,
         element: <Landing />,
       },
       {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/about',
-        element: <About />,
-      },
-      {
-        path: '/contact',
-        element: <Contact />,
-      },
-      {
-        path: '/dashboard',
+        path: 'auth',
         element: (
-          <SignedIn> 
+          <SignedOut>
+            <AuthPage />
+          </SignedOut>
+        ),
+      },
+      {
+        path: 'dashboard',
+        element: (
+          <SignedIn>
             <Dashboard />
           </SignedIn>
         ),
       },
       {
-        path: '*',
+        path: 'about',
+        element: <About />,
+      },
+      {
+        path: 'contact',
+        element: <Contact />,
+      },
+      {
+        path: 'rebel-alliance/*',
         element: (
-          <SignedOut>
-            <RedirectToSignIn />
-          </SignedOut>
+          <SignedIn>
+            <Navigate to="/dashboard" replace />
+          </SignedIn>
         ),
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
