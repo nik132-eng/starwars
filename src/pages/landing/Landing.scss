@@ -2,11 +2,29 @@ html, body {
   cursor: url('./assets/cursorlight.png'), auto; 
 }
 
+.loading{
+    color: black;
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+}
+
 .star-wars {
     position: relative;
     overflow: hidden;
     height: 100vh; 
     background: black; 
+
+    .lightsaber-wrapper {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        z-index: 2;
+    
+        @media (max-width: 768px) {
+          display: none; 
+        }
+      }
   
     .fade {
       position: absolute;
@@ -15,7 +33,7 @@ html, body {
       right: 0;
       bottom: 0;
       background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-      z-index: 10;
+      z-index: 1;
     }
   
     .crawl {
@@ -25,7 +43,7 @@ html, body {
       animation: crawl 60s linear forwards; 
   
       .title {
-        font-size: 90%;
+        font-size: 120%;
         text-align: center;
         color: #FFD700; 
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -64,47 +82,3 @@ html, body {
       }
     }
   }
-  
-  // Landing.scss
-// body, html, #app {
-//     margin: 0;
-//     width: 100%;
-//     height: 100%;
-//   }
-  
-//   #app {
-//     overflow: hidden;
-//     touch-action: pan-up;
-//     color: #ffffff;
-//     font-family: 'Montserrat', sans-serif;
-//     text-align: center;
-//     text-shadow: 0 0 5px #ffffff, 0 0 20px #000, 0 0 30px #000;
-//     position: relative; // Ensure relative positioning for neon cursor
-//   }
-  
-//   #app h1 {
-//     --fontSize: 60px;
-//     --lineHeight: 80px;
-//     width: auto;
-//     height: calc(2 * var(--lineHeight));
-//     line-height: var(--lineHeight);
-//     margin: calc(50vh - var(--lineHeight)) auto 0;
-//     font-size: var(--fontSize);
-//     text-transform: uppercase;
-//   }
-  
-//   #app a {
-//     margin-top: 10px;
-//     display: inline-block;
-//     text-decoration: none;
-//     color: #fff;
-//   }
-  
-//   #app canvas {
-//     display: block;
-//     position: fixed;
-//     z-index: -1;
-//     top: 0;
-//   }
-  
-  

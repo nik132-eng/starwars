@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Landing.scss'; 
+import Lightsaber from './Lightsaber';
 
 const Landing: React.FC = () => {
   const [films, setFilms] = useState<any[]>([]);
@@ -34,36 +35,8 @@ const Landing: React.FC = () => {
     return () => clearInterval(interval); 
   }, [films.length]); 
 
-  // Add neon cursor effect
-  useEffect(() => {
-    const loadNeonCursor = async () => {
-      try {
-        const neonCursorModule: any = await import('https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js');
-        const neonCursor = neonCursorModule.neonCursor;
-
-        neonCursor({
-          el: document.getElementById('app'), // Make sure 'app' is the correct ID
-          shaderPoints: 16,
-          curvePoints: 80,
-          curveLerp: 0.5,
-          radius1: 5,
-          radius2: 30,
-          velocityTreshold: 10,
-          sleepRadiusX: 100,
-          sleepRadiusY: 100,
-          sleepTimeCoefX: 0.0025,
-          sleepTimeCoefY: 0.0025,
-        });
-      } catch (error) {
-        console.error('Error loading neon cursor:', error);
-      }
-    };
-
-    loadNeonCursor();
-  }, []);
-
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className='loading'>Loading...</p>;
   }
 
   const currentFilm = films[currentFilmIndex] || {};
@@ -86,6 +59,10 @@ const Landing: React.FC = () => {
         </div>
       </div>
       <div className="fade"></div>
+	   {/* Lightsaber at the bottom left */}
+	   <div className="lightsaber-wrapper">
+        <Lightsaber />
+      </div>
     </section>
   );
 };
