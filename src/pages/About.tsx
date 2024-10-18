@@ -1,9 +1,16 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion } from 'framer-motion'
 
 export default function About() {
   return (
     <div className="min-h-screen bg-black text-yellow-400 py-12 px-4 sm:px-6 lg:px-8" style={{backgroundImage: 'url(/stars-background.jpg)', backgroundSize: 'cover'}}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-2xl mx-auto relative z-10"
+      >
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8" style={{textShadow: '0 0 10px rgba(255,215,0,0.7)'}}>
           About the Galactic Empire
@@ -36,6 +43,7 @@ export default function About() {
           </CardContent>
         </Card>
       </div>
+      </motion.div>
     </div>
   )
 }
