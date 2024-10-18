@@ -7,6 +7,7 @@ import wallpaper from '../../../assets/wallpaper.jpg'
 import plane from '../../../assets/plan.png'
 import useStore from '../../store/authStore';
 import { useNavigate } from 'react-router-dom'
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
 interface NavItemProps {
   item: string;
@@ -69,13 +70,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => (
   >
     <h2 className="text-2xl font-bold mb-4 text-yellow-400">{item}</h2>
     <p className="mb-4">Discover the {item.toLowerCase()} that shape the Star Wars saga.</p>
-    <Button
-      variant="outline"
+    <SignedIn>
+      <Button
+       variant="outline"
       className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors duration-300"
-      onClick={onSelect}
-    >
-      Explore {item}
-    </Button>
+      onClick={onSelect}>Explore {item}</Button>
+    </SignedIn>
+    
+    <SignedOut>
+      <Button
+      onClick={() => <RedirectToSignIn />}>Sign in to Explore {item}</Button>
+    </SignedOut>
   </motion.div>
 );
 
