@@ -37,6 +37,7 @@
 		"sass-embedded": "^1.79.5",
 		"tailwind-merge": "^2.5.4",
 		"tailwindcss-animate": "^1.0.7",
+		"vanilla-tilt": "^1.8.1",
 		"zustand": "^5.0.0"
 	},
 	"devDependencies": {

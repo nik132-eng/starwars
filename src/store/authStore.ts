@@ -1,20 +1,13 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
-interface AuthState {
-  isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+interface StoreState {
+  selectedCategory: string
+  setSelectedCategory: (category: string) => void
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
-    isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
-    login: () => {
-      localStorage.setItem('isAuthenticated', 'true');
-      set({ isAuthenticated: true });
-    },
-    logout: () => {
-      localStorage.removeItem('isAuthenticated');
-      set({ isAuthenticated: false });
-    },
-  }));
-  
+const useStore = create<StoreState>((set) => ({
+  selectedCategory: 'vehicles',
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
+}))
+
+export default useStore

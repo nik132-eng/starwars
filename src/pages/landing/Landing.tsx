@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from 'next-themes';
+import VanillaTilt from 'vanilla-tilt';
 import wallpaper from '../../../assets/wallpaper.jpg'
 import plane from '../../../assets/plan.png'
+import useStore from '../../store/authStore';
+import { useNavigate } from 'react-router-dom'
 
 interface NavItemProps {
   item: string;
@@ -11,6 +14,7 @@ interface NavItemProps {
 
 interface FeatureCardProps {
   item: string;
+  onSelect: () => void
 }
 
 // StarField Component
@@ -58,7 +62,7 @@ const NavItem: React.FC<NavItemProps> = ({ item }) => (
 );
 
 // FeatureCard Component with type annotations
-const FeatureCard: React.FC<FeatureCardProps> = ({ item }) => (
+const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
     className="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg transition-all duration-300"
@@ -68,21 +72,71 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ item }) => (
     <Button
       variant="outline"
       className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors duration-300"
+      onClick={onSelect}
     >
       Explore {item}
     </Button>
   </motion.div>
 );
 
+const TiltComponent = () => {
+  useEffect(() => {
+    const element = document.querySelector('.box') as HTMLElement;
+
+    if (element) {
+      // Initialize VanillaTilt on the element
+      VanillaTilt.init(element, {
+        max: 10,
+        speed: 200,
+        easing: 'cubic-bezier(.03,.98,.52,.99)',
+        reverse: true,
+        glare: true,
+        'max-glare': 0.1,
+      });
+    }
+
+    return () => {
+      if (element && (element as any).vanillaTilt) {
+        (element as any).vanillaTilt.destroy();
+      }
+    };
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="text-center mb-16"
+    >
+      <img src={wallpaper} alt="Star Wars background" className="bg-blend-lighten w-auto md:w-96 mx-auto box" />
+    </motion.div>
+  );
+};
+
+
 // Main LandingPage Component
 const LandingPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate()
+  const setSelectedCategory = useStore((state) => state.setSelectedCategory)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const categories: { [key: string]: string } = {
+    Characters: 'people',
+    Planets: 'planets',
+    Vehicles: 'vehicles',
+  }
+
+  const handleCardClick = (category: string) => {
+    setSelectedCategory(categories[category])
+    navigate('/dashboard')
+  }
 
   return (
     <AnimatePresence>
@@ -96,16 +150,16 @@ const LandingPage: React.FC = () => {
           <motion.img
             src={plane}
             alt="Star Wars plane"
-            className="w-48" // Smaller image size
+            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
             animate={{
-              rotate: 360,
-              x: [0, 150, 0, -150, 0], // Moves on the x-axis in a circular path
-              y: [0, 100, 200, 100, 0], // Moves on the y-axis in a circular path
+              x: [0, 80,150, 100, 0, -80, -150, -100, 0],
+              y: [0, 100, 0, -100, -200, -100, 0, 100, 0], 
+              rotate: 270, 
             }}
             transition={{
-              duration: 4, // Duration of one full circle
+              duration: 5, 
               ease: "linear",
-              repeat: Infinity, // Loop the animation infinitely
+              repeat: Infinity, 
             }}
           />
         </motion.div>
@@ -121,22 +175,7 @@ const LandingPage: React.FC = () => {
           <StarField />
 
           <div className="relative z-10 container mx-auto px-4 py-16">
-            <motion.div
-              initial={{ y: -50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="text-center mb-16"
-            >
-              <img src={wallpaper} alt="Star Wars background" className="w-64 mx-auto" />
-            </motion.div>
-
-            <nav className="mb-16">
-              <ul className="flex justify-center space-x-6">
-                {['Home', 'Characters', 'Planets', 'Vehicles'].map((item) => (
-                  <NavItem key={item} item={item} />
-                ))}
-              </ul>
-            </nav>
+          <TiltComponent />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -157,7 +196,7 @@ const LandingPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {['Characters', 'Planets', 'Vehicles'].map((item) => (
-                <FeatureCard key={item} item={item} />
+                <FeatureCard key={item} item={item} onSelect={() => handleCardClick(item)} />
               ))}
             </div>
           </div>

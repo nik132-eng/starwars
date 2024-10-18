@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import DataDashboard from '../components/DataDashboard'
+import useStore from '../store/authStore';
+
 
 export default function Dashboard() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('vehicles')
+  // const [selectedCategory, setSelectedCategory] = useState<string>('vehicles')
+  const selectedCategory = useStore((state) => state.selectedCategory)
+  const setSelectedCategory = useStore((state) => state.setSelectedCategory)
 
   const categories = ['people', 'films', 'starships', 'vehicles', 'species', 'planets']
 
