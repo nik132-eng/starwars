@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react"
+import { ItemDetailsModal } from './ItemDetailsModal'
 
 interface Item {
   [key: string]: any
@@ -24,6 +25,13 @@ export default function DataDashboard({ category }: DataDashboardProps) {
   const [sortBy, setSortBy] = useState<string>('name')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const handleCardClick = (item: Item) => {
+    setSelectedItem(item)
+    setIsModalOpen(true)
+  }
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -136,11 +144,11 @@ export default function DataDashboard({ category }: DataDashboardProps) {
           placeholder={`Search by name`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-1/3 bg-gray-800 text-white border-gray-700"
+          className="w-full md:w-2/3 bg-gray-800 text-white border-gray-700"
         />
 
         <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-1/4 bg-gray-800 text-white border-gray-700">
+          <SelectTrigger className="w-full md:w-2/3 bg-gray-800 text-white border-gray-700">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent className="bg-gray-800 text-white border-gray-700">
@@ -155,7 +163,7 @@ export default function DataDashboard({ category }: DataDashboardProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedItems.map((item) => (
-          <Card key={item.name || item.title} className="bg-gray-800 text-white border-gray-700 hover:border-yellow-400 transition-colors">
+          <Card key={item.name || item.title} className="bg-gray-800 text-white border-gray-700 hover:border-yellow-400 transition-colors" onClick={() => handleCardClick(item)}>
             <CardHeader className="bg-gray-700 rounded-t-xl">
               <CardTitle className="text-yellow-400">{item.name || item.title}</CardTitle>
             </CardHeader>
@@ -176,29 +184,39 @@ export default function DataDashboard({ category }: DataDashboardProps) {
         ))}
       </div>
 
-      <div className="mt-6 flex justify-center items-center space-x-4">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          variant="outline"
-          className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700"
-        >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Previous
-        </Button>
-        <span className="text-white">
-          Page {currentPage} of {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          variant="outline"
-          className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700"
-        >
-          Next
-          <ChevronRight className="h-4 w-4 ml-2" />
-        </Button>
+      <div className="mt-6 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex space-x-2">
+          <Button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            variant="outline"
+            className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700 px-2 sm:px-4"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Previous</span>
+          </Button>
+          <span className="text-white text-sm sm:text-base flex items-center justify-center">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            variant="outline"
+            className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700 px-2 sm:px-4"
+            aria-label="Next page"
+          >
+            <span className="hidden sm:inline mr-2">Next</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
+      <ItemDetailsModal 
+        item={selectedItem}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        category={category}
+      />
     </div>
   )
 }
