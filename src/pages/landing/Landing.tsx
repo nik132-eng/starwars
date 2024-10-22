@@ -11,6 +11,7 @@ import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import { SparklesCore } from '@/components/ui/sparkles';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { Meteors } from '@/components/ui/meteors';
+import { Cover } from '@/components/ui/cover';
 
 interface NavItemProps {
   item: string;
@@ -65,10 +66,17 @@ const NavItem: React.FC<NavItemProps> = ({ item }) => (
   </motion.li>
 );
 
-// FeatureCard Component with type annotations
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => (
-  <motion.div
+// FeatureCard Component with type annotations
+const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => {
+
+  const navigate = useNavigate();
+  
+  const handleSignIn = (e: any): void => {
+    navigate('/auth');
+  };
+  
+  return (<motion.div
     whileHover={{ scale: 1.05 }}
     className="relative bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg transition-all duration-300"
   >
@@ -95,14 +103,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => (
       <SignedOut>
         <Button
           variant="outline"
-          onClick={() => <RedirectToSignIn />}
+          onClick={handleSignIn}
         >
           Sign in to Explore {item}
         </Button>
       </SignedOut>
     </div>
-  </motion.div>
-);
+  </motion.div>)
+};
 
 
 const TiltComponent = () => {
@@ -145,7 +153,6 @@ const TiltComponent = () => {
 const LandingPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { theme, setTheme } = useTheme();
-  const navigate = useNavigate()
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
   const words = `Embark on an epic journey through the Star Wars universe`;
 
@@ -159,6 +166,7 @@ const LandingPage: React.FC = () => {
     Planets: 'planets',
     Vehicles: 'vehicles',
   }
+  const navigate = useNavigate();
 
   const handleCardClick = (category: string) => {
     setSelectedCategory(categories[category])
@@ -211,7 +219,7 @@ const LandingPage: React.FC = () => {
               className="text-center mb-16"
             >
               <div className="h-[20rem] w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
-                <h1 className="md:text-7xl text-3xl lg:text-9xl font-bold text-center text-yellow-400 relative z-20" >
+                <h1 className="md:text-7xl text-6xl lg:text-9xl font-bold text-center text-yellow-400 relative z-20" >
                   Star Wars
                 </h1>
                 <div className="w-[40rem] h-40 relative">
@@ -238,9 +246,9 @@ const LandingPage: React.FC = () => {
               <p className="text-xl md:text-2xl mb-8">
                 <TextGenerateEffect words={words} />
               </p>
-              <Button className="bg-yellow-400 text-black hover:bg-yellow-500 text-lg px-8 py-3 transition-colors duration-300">
-                Start Your Adventure
-              </Button>
+              <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+                <Cover>Start Your Adventure</Cover>
+              </h1>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
