@@ -14,11 +14,20 @@ module.exports = {
       },
       animation: {
         crawl: 'crawl 60s linear forwards',
+        "meteor-effect": "meteor 5s linear infinite",
       },
       keyframes: {
         crawl: {
           '0%': { top: '100%', transform: 'rotateX(20deg)' },
           '100%': { top: '-6000px', transform: 'rotateX(25deg)' },
+        },
+        meteor: {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": {
+            transform: "rotate(215deg) translateX(-500px)",
+            opacity: "0",
+          },
         },
       },
     },

@@ -8,6 +8,9 @@ import plane from '../../../assets/plan.png'
 import useStore from '../../store/authStore';
 import { useNavigate } from 'react-router-dom'
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { SparklesCore } from '@/components/ui/sparkles';
+import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
+import { Meteors } from '@/components/ui/meteors';
 
 interface NavItemProps {
   item: string;
@@ -63,26 +66,44 @@ const NavItem: React.FC<NavItemProps> = ({ item }) => (
 );
 
 // FeatureCard Component with type annotations
+
 const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
-    className="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg transition-all duration-300"
+    className="relative bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg transition-all duration-300"
   >
-    <h2 className="text-2xl font-bold mb-4 text-yellow-400">{item}</h2>
-    <p className="mb-4">Discover the {item.toLowerCase()} that shape the Star Wars saga.</p>
-    <SignedIn>
-      <Button
-       variant="outline"
-      className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors duration-300"
-      onClick={onSelect}>Explore {item}</Button>
-    </SignedIn>
-    
-    <SignedOut>
-      <Button
-      onClick={() => <RedirectToSignIn />}>Sign in to Explore {item}</Button>
-    </SignedOut>
+    {/* Meteor Effect */}
+    <div className="absolute inset-0 z-0">
+      <Meteors number={5} />
+    </div>
+
+    {/* Content of the Feature Card */}
+    <div className="relative z-10">
+      <h2 className="text-2xl font-bold mb-4 text-yellow-400">{item}</h2>
+      <p className="mb-4">Discover the {item.toLowerCase()} that shape the Star Wars saga.</p>
+
+      <SignedIn>
+        <Button
+          variant="outline"
+          className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors duration-300"
+          onClick={onSelect}
+        >
+          Explore {item}
+        </Button>
+      </SignedIn>
+
+      <SignedOut>
+        <Button
+          variant="outline"
+          onClick={() => <RedirectToSignIn />}
+        >
+          Sign in to Explore {item}
+        </Button>
+      </SignedOut>
+    </div>
   </motion.div>
 );
+
 
 const TiltComponent = () => {
   useEffect(() => {
@@ -112,7 +133,7 @@ const TiltComponent = () => {
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1 }}
-      className="text-center mb-16"
+      className="text-center mb-8"
     >
       <img src={wallpaper} alt="Star Wars background" className="bg-blend-lighten w-auto md:w-96 mx-auto box" />
     </motion.div>
@@ -126,6 +147,7 @@ const LandingPage: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate()
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
+  const words = `Embark on an epic journey through the Star Wars universe`;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -188,11 +210,33 @@ const LandingPage: React.FC = () => {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-yellow-400" style={{ textShadow: '0 0 10px rgba(255,215,0,0.7)' }}>
-                Explore the Galaxy
-              </h1>
+              <div className="h-[20rem] w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+                <h1 className="md:text-7xl text-3xl lg:text-9xl font-bold text-center text-yellow-400 relative z-20" >
+                  Star Wars
+                </h1>
+                <div className="w-[40rem] h-40 relative">
+                  {/* Gradients */}
+                  <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+                  <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+          
+                  {/* Core component */}
+                  <SparklesCore
+                    background="transparent"
+                    minSize={0.4}
+                    maxSize={1}
+                    particleDensity={1200}
+                    className="w-full h-full"
+                    particleColor="#FFFFFF"
+                  />
+          
+                  {/* Radial Gradient to prevent sharp edges */}
+                  <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+                </div>
+              </div>
               <p className="text-xl md:text-2xl mb-8">
-                Embark on an epic journey through the Star Wars universe
+                <TextGenerateEffect words={words} />
               </p>
               <Button className="bg-yellow-400 text-black hover:bg-yellow-500 text-lg px-8 py-3 transition-colors duration-300">
                 Start Your Adventure
