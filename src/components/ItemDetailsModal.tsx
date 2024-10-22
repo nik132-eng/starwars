@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { getImageUrl } from '@/utils/imageUtils'
 
 interface ItemDetailsModalProps {
   item: any
@@ -44,10 +45,6 @@ export function ItemDetailsModal({ item, isOpen, onClose, category }: ItemDetail
           { label: 'Passengers', value: item.passengers },
           { label: 'Cargo Capacity', value: item.cargo_capacity },
           { label: 'Consumables', value: item.consumables },
-          { label: 'Hyperdrive Rating', value: item.hyperdrive_rating },
-          { label: 'MGLT', value: item.MGLT },
-          { label: 'Starship Class', value: item.starship_class },
-          { label: 'Vehicle Class', value: item.vehicle_class },
         ]
       case 'species':
         return [
@@ -79,20 +76,32 @@ export function ItemDetailsModal({ item, isOpen, onClose, category }: ItemDetail
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gray-800 text-white border-gray-700 max-w-3xl max-h-[80vh]">
-        <DialogHeader className='border-b border-yellow-400 pb-4 mb-4'>
-          <DialogTitle className="text-2xl font-bold text-yellow-400">
-            {item.name || item.title}
-          </DialogTitle>
-        </DialogHeader>
-        <ScrollArea className="mt-4 max-h-[60vh]">
-          {getDetailFields().map((field, index) => (
-            <div key={index} className="mb-4">
-              <h3 className="text-lg font-semibold text-yellow-400">{field.label}</h3>
-              <p className="text-gray-300">{field.value || 'N/A'}</p>
-            </div>
-          ))}
-        </ScrollArea>
+      <DialogContent className="bg-gray-900 text-white border-gray-700 max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+        <div className="flex h-full">
+          <div className="flex-1 p-6 overflow-hidden">
+            <DialogHeader className='border-b border-yellow-400 pb-4 mb-4'>
+              <DialogTitle className="text-3xl font-bold text-yellow-400">
+                {item.name || item.title}
+              </DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-[calc(100%-80px)] pr-4 overflow-y-auto flex-1">
+              {getDetailFields().map((field, index) => (
+                <div key={index} className="mb-4">
+                  <h3 className="text-lg font-semibold text-yellow-400">{field.label}</h3>
+                  <p className="text-gray-300">{field.value || 'N/A'}</p>
+                </div>
+              ))}
+            </ScrollArea>
+          </div>
+          <div className="w-1/2 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-gray-900 z-10" />
+            <img
+              src={getImageUrl(category, item.url)}
+              alt={item.name || item.title}
+              className="z-0 w-full h-full mb-2 rounded object-cover" 
+            />
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   )
