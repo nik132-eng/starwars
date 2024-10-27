@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from 'next-themes';
 import VanillaTilt from 'vanilla-tilt';
 import wallpaper from '../../../assets/wallpaper.jpg'
 import plane from '../../../assets/plan.png'
 import useStore from '../../store/authStore';
 import { useNavigate } from 'react-router-dom'
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { SparklesCore } from '@/components/ui/sparkles';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { Meteors } from '@/components/ui/meteors';
 import { Cover } from '@/components/ui/cover';
-
-interface NavItemProps {
-  item: string;
-}
 
 interface FeatureCardProps {
   item: string;
@@ -49,30 +44,13 @@ const StarField: React.FC = () => (
   </div>
 );
 
-// NavItem Component with type annotations
-const NavItem: React.FC<NavItemProps> = ({ item }) => (
-  <motion.li
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <a href={`/${item.toLowerCase()}`}>
-      <Button
-        variant="outline"
-        className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors duration-300"
-      >
-        {item}
-      </Button>
-    </a>
-  </motion.li>
-);
-
 
 // FeatureCard Component with type annotations
 const FeatureCard: React.FC<FeatureCardProps> = ({ item, onSelect }) => {
 
   const navigate = useNavigate();
   
-  const handleSignIn = (e: any): void => {
+  const handleSignIn = (): void => {
     navigate('/auth');
   };
   
@@ -152,7 +130,6 @@ const TiltComponent = () => {
 // Main LandingPage Component
 const LandingPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { theme, setTheme } = useTheme();
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
   const words = `Embark on an epic journey through the Star Wars universe`;
 

@@ -34,7 +34,14 @@ export default function Navbar() {
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               <SignedIn>
-                <NavLink to="/dashboard">Dashboard</NavLink>
+              <div className=''>
+                <NavLink to="/pdflist">
+                  Books
+                </NavLink>
+              </div>
+              <NavLink to="/dashboard">
+                Dashboard
+              </NavLink>
                 <UserButton 
                   appearance={{
                     elements: {
@@ -72,6 +79,9 @@ export default function Navbar() {
             <NavLink to="/contact" mobile>Contact</NavLink>
             <SignedIn>
               <NavLink to="/dashboard" mobile>Dashboard</NavLink>
+            </SignedIn>
+            <SignedIn>
+              <NavLink to="/pdflist" mobile>Books</NavLink>
             </SignedIn>
             <SignedOut>
               <NavLink to="/auth" mobile>Login</NavLink>

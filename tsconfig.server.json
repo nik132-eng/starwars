@@ -1,0 +1,26 @@
+{
+    "extends": "@tsconfig/node-lts-strictest-esm/tsconfig.json",
+    "compilerOptions": {
+      "outDir": "dist",
+      "rootDir": "src",
+      "target": "ESNext",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "lib": ["ES2022"],
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "strict": true,
+      "noEmit": false,
+      "baseUrl": "src",
+      "types": ["vite/client"],
+      "paths": {
+        "@/*": ["./*"]
+      },
+      "isolatedModules": true
+    },
+    "include": ["src/server/**/*", "src/types/**/*"],
+    "exclude": ["node_modules"],
+    
+  }
