@@ -18,7 +18,7 @@ interface Person {
 
 const ResourceDetailPage = () => {
   const { id } = useParams();
-  const { data, isLoading, error } = useResourceDetail<Person>(`https://swapi.dev/api/people/${id}`);
+  const { data, isLoading, error } = useResourceDetail<Person>(`${import.meta.env.VITE_SWAPI_BASE_URL}/people/${id}`);
 
   if (isLoading) {
     return <Loader />;

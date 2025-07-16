@@ -8,7 +8,7 @@ interface Resource {
 }
 
 const fetchResources = async (): Promise<Resource[]> => {
-  const res = await fetch('https://swapi.dev/api/people/');
+  const res = await fetch(`${import.meta.env.VITE_SWAPI_BASE_URL}/people`);
   if (!res.ok) throw new Error('Failed to fetch resources');
   return res.json().then((data) => data.results);
 };

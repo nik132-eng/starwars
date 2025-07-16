@@ -22,7 +22,7 @@ interface EnrichedResource extends Omit<Resource, 'homeworld' | 'films' | 'vehic
 }
 
 const fetchResourceDetail = async (id: string): Promise<Resource> => {
-  const res = await fetch(`https://swapi.dev/api/people/${id}/`);
+  const res = await fetch(`${import.meta.env.VITE_SWAPI_BASE_URL}/people/${id}`);
   if (!res.ok) throw new Error('Failed to fetch resource');
   return res.json();
 };

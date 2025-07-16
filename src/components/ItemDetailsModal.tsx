@@ -2,6 +2,7 @@ import React from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { getImageUrl } from '@/utils/imageUtils'
+import { FALLBACK_IMAGES } from '@/utils/fallbackImages'
 
 interface ItemDetailsModalProps {
   item: any
@@ -98,6 +99,10 @@ export function ItemDetailsModal({ item, isOpen, onClose, category }: ItemDetail
             <img
               src={getImageUrl(category, item.url)}
               alt={item.name || item.title}
+              onError={(e) => {
+                e.currentTarget.src =
+                  FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES] || FALLBACK_IMAGES.default;
+              }}
               className="z-0 w-full h-full mb-2 rounded object-cover" 
             />
           </div>

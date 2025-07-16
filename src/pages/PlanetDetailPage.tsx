@@ -12,7 +12,7 @@ interface Planet {
   
   export const PlanetDetailPage = () => {
     const { id } = useParams();
-    const { data, isLoading, error } = useResourceDetail<Planet>(`https://swapi.dev/api/planets/${id}`);
+    const { data, isLoading, error } = useResourceDetail<Planet>(`${import.meta.env.VITE_SWAPI_BASE_URL}/planets/${id}`);
   
     if (isLoading) {
       return <Loader />;
@@ -31,4 +31,3 @@ interface Planet {
       </Card>
     );
   };
-  
